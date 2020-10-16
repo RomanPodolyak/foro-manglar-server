@@ -7,6 +7,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var testRouter = require('./routes/test');
+var apiRouter = require('./routes/api');
 
 //creates express aplication
 var app = express();
@@ -35,6 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/test', testRouter);
+app.use('/api', apiRouter);
 
 // direct processing of requests vithout routing them to other js files
 //testing throwing an error

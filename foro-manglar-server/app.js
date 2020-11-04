@@ -4,13 +4,13 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var testRouter = require('./routes/test');
 var apiRouter = require('./routes/api');
 
 //creates express aplication
 var app = express();
+
+//hide express tag in header
+app.disable('x-powered-by');
 
 // SETUP MIDDLEWARE
 // view engine setup
@@ -30,26 +30,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // MIDDLEWARE
 
-
 // ROUTES
-// detects requests to some resources and forwards then to js files in ./routes/
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/test', testRouter);
 app.use('/api', apiRouter);
 
-// direct processing of requests vithout routing them to other js files
-//testing throwing an error
-app.get('/test-error', (req, res, next) => {
-  console.log("TEST ERROR PAGE REQUESTED");
-  throw new Error("TEST ERROR THROWED");
-});
 // Fuck that favicon
 app.get('/favicon.ico', (req, res) => res.status(204));
-
-app.get('/test/no-response', (res, req, next)=>{
-  console.log("Requested /test/no-response");
-});
 
 // catch 404 and forward to error handler
 // executes if no use or get with valid route caches it first before

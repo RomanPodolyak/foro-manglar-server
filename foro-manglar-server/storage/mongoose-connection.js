@@ -2,17 +2,14 @@ var mongooseConnection = require("mongoose");
 
 //MongoDB connection string
 //mongodb://admin:asdf@localhost:27017/   <- TEST DATABASE, TODO CHANGE
-let dbUserName = "admin";
-let dbPassword = "asdf";
-let dbLogin = false;
-let dbHost = "localhost";
-let dbPort = "27017";
 let dbConnectionString =
   "mongodb://" +
-  (dbLogin ? dbUserName + ":" + dbPassword + "@" : "") +
-  dbHost +
+  (process.env.DB_LOGIN
+    ? process.env.DB_USERNAME + ":" + process.env.DB_PASSWORD + "@"
+    : "") +
+  process.env.DB_HOST +
   ":" +
-  dbPort +
+  process.env.DB_PORT +
   "/";
 
 //connect to MongoDB

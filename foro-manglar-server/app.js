@@ -40,7 +40,7 @@ app.use(express.static(path.join(__dirname, "public")));
 //session management
 app.use(
   session({
-    secret: "cRfUjXn2r5u8x/A?D(G+KbPeSgVkYp3s6v9y$B&E)H@McQfTjWmZq4t7w!z%C*F-",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     autoRemove: 'interval',

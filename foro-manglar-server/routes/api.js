@@ -56,8 +56,6 @@ router.post("/create/comment", function (req, res, next) {
 
 //READ
 router.get("/read/themes", function (req, res, next) {
-  //res.contentType("json");
-
   async function query(req, res) {
     let query = themeModule
       .find({})
@@ -75,13 +73,15 @@ router.get("/read/themes", function (req, res, next) {
 
     res.send(body);
   }
-
   query(req, res).catch(function (error) {
     let body = { status: "error", info: error + "" };
     console.log(error);
     console.log(body);
     res.send(body);
   });
+});
+router.get("/read/themes/all", function (req, res, next) {
+  res.send({ status: "not implemented" });
 });
 router.get("/read/themes/:themeId", function (req, res, next) {
   res.send({ status: "not implemented" });
@@ -103,22 +103,10 @@ router.get("/read/comment/:commentId", function (req, res, next) {
 });
 
 //UPDATE
-router.put("/update/themes", function (req, res, next) {
-  res.send({ status: "not implemented" });
-});
-router.put("/update/themes/:themeId", function (req, res, next) {
-  res.send({ status: "not implemented" });
-});
 router.put("/update/theme/:themeId", function (req, res, next) {
   res.send({ status: "not implemented" });
 });
-router.put("/update/posts/:themeId", function (req, res, next) {
-  res.send({ status: "not implemented" });
-});
 router.put("/update/post/:postId", function (req, res, next) {
-  res.send({ status: "not implemented" });
-});
-router.put("/update/comments/:postId", function (req, res, next) {
   res.send({ status: "not implemented" });
 });
 router.put("/update/comment/:commentId", function (req, res, next) {
@@ -126,22 +114,10 @@ router.put("/update/comment/:commentId", function (req, res, next) {
 });
 
 //DELETE
-router.delete("/delete/themes", function (req, res, next) {
-  res.send({ status: "not implemented" });
-});
-router.delete("/delete/themes/:themeId", function (req, res, next) {
-  res.send({ status: "not implemented" });
-});
 router.delete("/delete/theme/:themeId", function (req, res, next) {
   res.send({ status: "not implemented" });
 });
-router.delete("/delete/posts/:themeId", function (req, res, next) {
-  res.send({ status: "not implemented" });
-});
 router.delete("/delete/post/:postId", function (req, res, next) {
-  res.send({ status: "not implemented" });
-});
-router.delete("/delete/comments/:postId", function (req, res, next) {
   res.send({ status: "not implemented" });
 });
 router.delete("/delete/comment/:commentId", function (req, res, next) {

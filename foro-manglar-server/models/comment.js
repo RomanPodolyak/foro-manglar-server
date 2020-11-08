@@ -3,13 +3,15 @@ var mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 
-const themeSchema = new Schema({
+const commentSchema = new Schema({
   date: Date,
+  editDate: Date,
   originalPoster: String,
+  post: String,
   title: String,
   content: String,
 });
 
-const theme = mongoose.model("Theme", themeSchema);
+const comment = mongoose.model("Comment", commentSchema);
 
-module.exports = theme;
+module.exports = comment;

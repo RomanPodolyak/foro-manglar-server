@@ -1,7 +1,7 @@
-//import mongoose from "mongoose";
-var mongoose = require("mongoose");
+// import mongoose from "mongoose";
+const mongoose = require('mongoose')
 
-const { Schema } = mongoose;
+const { Schema } = mongoose
 
 const postSchema = new Schema({
   date: Date,
@@ -9,9 +9,9 @@ const postSchema = new Schema({
   originalPoster: String,
   theme: String,
   title: String,
-  content: String,
-});
+  content: String
+})
 
-const post = mongoose.model("Post", postSchema);
+const post = mongoose.model('Post', postSchema)
 
-module.exports = post;
+module.exports = post

@@ -1,8 +1,8 @@
-//import mongoose from "mongoose";
-var mongoose = require("mongoose");
-var passportLocalMongoose = require('passport-local-mongoose');
+// import mongoose from "mongoose";
+const mongoose = require('mongoose')
+const passportLocalMongoose = require('passport-local-mongoose')
 
-const { Schema } = mongoose;
+const { Schema } = mongoose
 
 const userSchema = new Schema({
   username: String,
@@ -13,12 +13,12 @@ const userSchema = new Schema({
   description: String,
   userConfig: {
     hideNsfwImages: Boolean,
-    darkTheme: Boolean,
-  },
-});
+    darkTheme: Boolean
+  }
+})
 
-userSchema.plugin(passportLocalMongoose);
+userSchema.plugin(passportLocalMongoose)
 
-const user = mongoose.model("User", userSchema);
+const user = mongoose.model('User', userSchema)
 
-module.exports = user;
+module.exports = user

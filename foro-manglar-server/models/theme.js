@@ -1,15 +1,15 @@
-//import mongoose from "mongoose";
-var mongoose = require("mongoose");
+// import mongoose from "mongoose";
+const mongoose = require('mongoose')
 
-const { Schema } = mongoose;
+const { Schema } = mongoose
 
 const themeSchema = new Schema({
   date: Date,
   originalPoster: String,
   title: String,
-  content: String,
-});
+  content: String
+})
 
-const theme = mongoose.model("Theme", themeSchema);
+const theme = mongoose.model('Theme', themeSchema)
 
-module.exports = theme;
+module.exports = theme

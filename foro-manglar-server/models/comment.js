@@ -6,7 +6,7 @@ const { Schema } = mongoose
 
 const CommentSchema = new Schema({
   originalPoster: String,
-  post: String,
+  parentPost: String,
   content: String
 })
 

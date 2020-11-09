@@ -31,9 +31,13 @@ exports.validateContent = function (content) {
   return content.length <= 5000
 }
 
-// full validator and existence checker
-exports.validate = (req, res, dataType, required) => {
+/** generic validator and existence checker */
+exports.validate = (req, res, type, required, name) => {
   const validatorsFunctions = {
+    objectId: {
+      function: this.validateObjectId,
+      tip: 'only hexadecimal strings of length 24 allowed'
+    },
     parentTheme: {
       function: this.validateObjectId,
       tip: 'only hexadecimal strings of length 24 allowed'
@@ -43,6 +47,18 @@ exports.validate = (req, res, dataType, required) => {
       tip: 'only hexadecimal strings of length 24 allowed'
     },
     parentComment: {
+      function: this.validateObjectId,
+      tip: 'only hexadecimal strings of length 24 allowed'
+    },
+    themeId: {
+      function: this.validateObjectId,
+      tip: 'only hexadecimal strings of length 24 allowed'
+    },
+    postId: {
+      function: this.validateObjectId,
+      tip: 'only hexadecimal strings of length 24 allowed'
+    },
+    commentId: {
       function: this.validateObjectId,
       tip: 'only hexadecimal strings of length 24 allowed'
     },
@@ -73,10 +89,10 @@ exports.validate = (req, res, dataType, required) => {
   }
 
   let obj
-  if (required && !req.body[dataType]) {
-    obj = helper.generateErrorObject('No ' + dataType + ' was given', 400)
-  } else if (req.body[dataType] && !validatorsFunctions[dataType].function(req.body[dataType])) {
-    obj = helper.generateErrorObject('Bad ' + dataType + ', ' + validatorsFunctions[dataType].tip, 400)
+  if (required && !req.body[type]) {
+    obj = helper.generateErrorObject('No ' + (name || type) + ' was given', 400)
+  } else if (req.body[type] && !validatorsFunctions[type].function(req.body[type])) {
+    obj = helper.generateErrorObject('Bad ' + (name || type) + ', ' + validatorsFunctions[type].tip, 400)
   }
   return helper.sendObject(res, obj)
 }

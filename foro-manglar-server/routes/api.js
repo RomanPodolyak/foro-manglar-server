@@ -1,8 +1,10 @@
 /* eslint-disable no-unused-vars */
 
 // TODO ckeck parent theme or post exists
+// TODO implement permissions
+// TODO implement search
+
 const express = require('express')
-const mongooseConnection = require('../controllers/mongoose-connection')
 const passport = require('passport')
 const router = express.Router()
 const validators = require('../controllers/validators')
@@ -95,71 +97,133 @@ router.post('/create/comment', function (req, res, next) {
 })
 
 // READ
-router.get('/read/themes', function (req, res, next) {
-  async function query (req, res) {
-    const query = ThemeModel.find({})
-      .limit(parseInt(req.body.limit) || 100)
-      .skip(parseInt(req.body.offset) || 0)
-
-    const data = await query.exec()
-
-    const body = {
+router.get('/read/themes/all', function (req, res, next) {
+  helper.getAllDocumentsByType('theme', req.body.limit, req.body.skip).then(data => {
+    const obj = {
       status: 'ok',
       data: data
     }
-
-    console.log(data)
-
-    res.send(body)
-  }
-  query(req, res).catch(function (error) {
-    const body = { status: 'error', info: error + '' }
-    console.log(error)
-    console.log(body)
-    res.send(body)
+    console.log('data.length :>> ', data.length) // TODO delete
+    res.send(obj)
   })
 })
-router.get('/read/themes/all', function (req, res, next) {
-  res.send({ status: 'not implemented' })
+router.get('/read/themes', function (req, res, next) {
+  if (!validators.validate(req, res, 'parentTheme')) {
+    helper.getDocumentsByParentId(req.body.parentTheme, 'theme', 'theme', false, req.body.limit, req.body.skip).then(data => {
+      const obj = {
+        status: 'ok',
+        data: data
+      }
+      console.log('data.length :>> ', data.length) // TODO delete
+      res.send(obj)
+    })
+  }
 })
-router.get('/read/themes/:themeId', function (req, res, next) {
-  res.send({ status: 'not implemented' })
+router.get('/read/theme', function (req, res, next) {
+  if (validators.validate(req, res, 'themeId', true)) {
+    return
+  }
+  helper.getDocumentById(req.body.themeId, 'theme').then(data => {
+    console.log('data :>> ', data) // TODO delete
+    const obj = {
+      status: data ? 'ok' : 'error',
+      data: data
+    }
+    res.status(data ? 200 : 500).send(obj)
+  })
 })
-router.get('/read/theme/:themeId', function (req, res, next) {
-  res.send({ status: 'not implemented' })
+
+router.get('/read/posts/all', function (req, res, next) {
+  helper.getAllDocumentsByType('post', req.body.limit, req.body.skip).then(data => {
+    const obj = {
+      status: 'ok',
+      data: data
+    }
+    console.log('data.length :>> ', data.length) // TODO delete
+    res.send(obj)
+  })
 })
-router.get('/read/posts/:themeId', function (req, res, next) {
-  res.send({ status: 'not implemented' })
+router.get('/read/posts', function (req, res, next) {
+  if (!validators.validate(req, res, 'parentTheme', true)) {
+    helper.getDocumentsByParentId((req.body.parentTheme), 'post', 'theme', true, req.body.limit, req.body.skip).then(data => {
+      const obj = {
+        status: 'ok',
+        data: data
+      }
+      console.log('data.length :>> ', data.length) // TODO delete
+      res.send(obj)
+    })
+  }
 })
-router.get('/read/post/:postId', function (req, res, next) {
-  res.send({ status: 'not implemented' })
+router.get('/read/post', function (req, res, next) {
+  if (validators.validate(req, res, 'postId', true)) {
+    return
+  }
+  helper.getDocumentById(req.body.postId, 'post').then(data => {
+    console.log('data :>> ', data) // TODO delete
+    const obj = {
+      status: data ? 'ok' : 'error',
+      data: data
+    }
+    res.status(data ? 200 : 500).send(obj)
+  })
 })
-router.get('/read/comments/:postId', function (req, res, next) {
-  res.send({ status: 'not implemented' })
+
+router.get('/read/comments/all', function (req, res, next) {
+  helper.getAllDocumentsByType('comment', req.body.limit, req.body.skip).then(data => {
+    const obj = {
+      status: 'ok',
+      data: data
+    }
+    console.log('data.length :>> ', data.length) // TODO delete
+    res.send(obj)
+  })
 })
-router.get('/read/comment/:commentId', function (req, res, next) {
-  res.send({ status: 'not implemented' })
+router.get('/read/comments', function (req, res, next) {
+  if (!validators.validate(req, res, 'parentPost', true)) {
+    helper.getDocumentsByParentId((req.body.parentPost), 'comment', 'post', true, req.body.limit, req.body.skip).then(data => {
+      const obj = {
+        status: 'ok',
+        data: data
+      }
+      console.log('data.length :>> ', data.length) // TODO delete
+      res.send(obj)
+    })
+  }
+})
+router.get('/read/comment', function (req, res, next) {
+  if (validators.validate(req, res, 'commentId', true)) {
+    return
+  }
+  helper.getDocumentById(req.body.commentId, 'comment').then(data => {
+    console.log('data :>> ', data) // TODO delete
+    const obj = {
+      status: data ? 'ok' : 'error',
+      data: data
+    }
+    res.status(data ? 200 : 500).send(obj)
+  })
 })
 
 // UPDATE
-router.put('/update/theme/:themeId', function (req, res, next) {
+router.put('/update/theme', function (req, res, next) {
   res.send({ status: 'not implemented' })
 })
-router.put('/update/post/:postId', function (req, res, next) {
+router.put('/update/post', function (req, res, next) {
   res.send({ status: 'not implemented' })
 })
-router.put('/update/comment/:commentId', function (req, res, next) {
+router.put('/update/comment', function (req, res, next) {
   res.send({ status: 'not implemented' })
 })
 
 // DELETE
-router.delete('/delete/theme/:themeId', function (req, res, next) {
+router.delete('/delete/theme', function (req, res, next) {
   res.send({ status: 'not implemented' })
 })
-router.delete('/delete/post/:postId', function (req, res, next) {
+router.delete('/delete/post', function (req, res, next) {
   res.send({ status: 'not implemented' })
 })
-router.delete('/delete/comment/:commentId', function (req, res, next) {
+router.delete('/delete/comment', function (req, res, next) {
   res.send({ status: 'not implemented' })
 })
 

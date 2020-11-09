@@ -1,15 +1,18 @@
 // import mongoose from "mongoose";
 const mongoose = require('mongoose')
+const timestamps = require('mongoose-timestamp')
 
 const { Schema } = mongoose
 
-const themeSchema = new Schema({
-  date: Date,
+const ThemeSchema = new Schema({
+  parentTheme: String,
   originalPoster: String,
   title: String,
-  content: String
+  description: String
 })
 
-const theme = mongoose.model('Theme', themeSchema)
+ThemeSchema.plugin(timestamps)
 
-module.exports = theme
+const Theme = mongoose.model('Theme', ThemeSchema)
+
+module.exports = Theme

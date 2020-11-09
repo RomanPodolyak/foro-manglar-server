@@ -1,17 +1,18 @@
 // import mongoose from "mongoose";
 const mongoose = require('mongoose')
+const timestamps = require('mongoose-timestamp')
 
 const { Schema } = mongoose
 
-const postSchema = new Schema({
-  date: Date,
-  editDate: Date,
+const PostSchema = new Schema({
+  parentTheme: String,
   originalPoster: String,
-  theme: String,
   title: String,
   content: String
 })
 
-const post = mongoose.model('Post', postSchema)
+PostSchema.plugin(timestamps)
 
-module.exports = post
+const Post = mongoose.model('Post', PostSchema)
+
+module.exports = Post

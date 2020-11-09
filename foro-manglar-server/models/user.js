@@ -1,15 +1,15 @@
 // import mongoose from "mongoose";
 const mongoose = require('mongoose')
 const passportLocalMongoose = require('passport-local-mongoose')
+const timestamps = require('mongoose-timestamp')
 
 const { Schema } = mongoose
 
-const userSchema = new Schema({
+const UserSchema = new Schema({
   username: String,
   enabled: Boolean,
   userType: String,
   email: String,
-  creationDate: Date,
   description: String,
   userConfig: {
     hideNsfwImages: Boolean,
@@ -17,8 +17,9 @@ const userSchema = new Schema({
   }
 })
 
-userSchema.plugin(passportLocalMongoose)
+UserSchema.plugin(passportLocalMongoose)
+UserSchema.plugin(timestamps)
 
-const user = mongoose.model('User', userSchema)
+const User = mongoose.model('User', UserSchema)
 
-module.exports = user
+module.exports = User

@@ -1,17 +1,17 @@
 // import mongoose from "mongoose";
 const mongoose = require('mongoose')
+const timestamps = require('mongoose-timestamp')
 
 const { Schema } = mongoose
 
-const commentSchema = new Schema({
-  date: Date,
-  editDate: Date,
+const CommentSchema = new Schema({
   originalPoster: String,
   post: String,
-  title: String,
   content: String
 })
 
-const comment = mongoose.model('Comment', commentSchema)
+CommentSchema.plugin(timestamps)
 
-module.exports = comment
+const Comment = mongoose.model('Comment', CommentSchema)
+
+module.exports = Comment

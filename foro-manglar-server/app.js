@@ -10,7 +10,7 @@ const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 
 const apiRouter = require('./routes/api')
-const mongooseConnection = require('./storage/mongoose-connection')
+const mongooseConnection = require('./controllers/mongoose-connection')
 
 // creates express aplication
 const app = express()

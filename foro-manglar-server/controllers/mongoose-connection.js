@@ -23,4 +23,11 @@ mongooseConnection
     console.log(e)
   })
 
+const db = mongooseConnection.connection
+// event handlers
+db.on('error', console.error.bind(console, 'connection error:'))
+db.on('open', function () {
+  console.log('Connected to MongoDB')
+})
+
 module.exports = mongooseConnection

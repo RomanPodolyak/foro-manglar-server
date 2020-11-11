@@ -7,6 +7,7 @@ const { Schema } = mongoose
 const PostSchema = new Schema({
   parentTheme: String,
   originalPoster: String,
+  visible: Boolean,
   title: String,
   content: String
 })

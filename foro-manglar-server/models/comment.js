@@ -5,8 +5,9 @@ const timestamps = require('mongoose-timestamp')
 const { Schema } = mongoose
 
 const CommentSchema = new Schema({
-  originalPoster: String,
   parentPost: String,
+  originalPoster: String,
+  visible: Boolean,
   content: String
 })
 

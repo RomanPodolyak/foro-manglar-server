@@ -1,4 +1,5 @@
 const mongooseConnection = require('mongoose')
+mongooseConnection.set('debug', true)
 
 // MongoDB connection string
 // mongodb://admin:asdf@localhost:27017/   <- TEST DATABASE, TODO CHANGE

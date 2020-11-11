@@ -1,6 +1,8 @@
+// TODO checkUser(req, res, objectId?, type?)
+
 const validators = require('./validators')
 
-const models = {
+exports.models = {
   theme: require('../models/theme'),
   post: require('../models/post'),
   comment: require('../models/comment'),
@@ -35,7 +37,7 @@ exports.stringToParent = function (str) {
 /** returns document promise using id and model type */
 exports.getDocumentById = function (id, type) {
   if (validators.validateObjectId(id)) {
-    return models[type].find({ _id: id }).exec()
+    return this.models[type].find({ _id: id, visible: true }).exec()
   } else {
     console.log('objectId not valid')
   }
@@ -48,15 +50,17 @@ exports.getDocumentsByParentId = function (id, type, parentType, required, limit
     console.log('objectId not valid')
     return
   }
-  return models[type]
-    .find({ [this.stringToParent(parentType)]: id !== '' ? id : undefined })
+  return this.models[type]
+    .find({ [this.stringToParent(parentType)]: id !== '' ? id : undefined, visible: true })
     .limit(parseInt(limit) || 100)
     .skip(parseInt(offset) || 0)
     .exec()
 }
 
+// TODO delete
+/** DEBUG!!! returns all documents from a specific type, visible or not */
 exports.getAllDocumentsByType = function (type, limit, offset) {
-  return models[type]
+  return this.models[type]
     .find({})
     .limit(parseInt(limit) || 100)
     .skip(parseInt(offset) || 0)

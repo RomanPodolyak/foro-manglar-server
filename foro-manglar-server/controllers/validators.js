@@ -32,7 +32,7 @@ exports.validateContent = function (content) {
 }
 
 /** generic validator and existence checker */
-exports.validate = (req, res, type, required, name) => {
+exports.checkValidity = (req, res, type, required, name) => {
   const validatorsFunctions = {
     objectId: {
       function: this.validateObjectId,
@@ -94,5 +94,30 @@ exports.validate = (req, res, type, required, name) => {
   } else if (req.body[type] && !validatorsFunctions[type].function(req.body[type])) {
     obj = helper.generateErrorObject('Bad ' + (name || type) + ', ' + validatorsFunctions[type].tip, 400)
   }
-  return helper.sendObject(res, obj)
+  return !helper.sendObject(res, obj)
+}
+
+/** returns bool promise depending on parent existence */
+exports.checkParentExists = (req, res, type, required) => {
+  const typesToParent = {
+    theme: 'theme',
+    post: 'theme',
+    comment: 'post'
+  }
+  return helper.models[typesToParent[type]]
+    .find({
+      _id: req.body[helper.stringToParent(typesToParent[type])] === '' ? 'aaaaaaaaaaaaaaaaaaaaaaaa' : req.body[helper.stringToParent(typesToParent[type])],
+      inexistent: req.body[helper.stringToParent(typesToParent[type])] === '' ? true : undefined
+    })
+    .exec()
+    .then(result => {
+      if (!required && !req.body[helper.stringToParent(typesToParent[type])]) {
+        return true
+      } else if (!result.length) {
+        res.status(400).send(helper.generateErrorObject("Parent object doesn't exist", 400))
+        return false
+      } else {
+        return true
+      }
+    })
 }

@@ -1,5 +1,6 @@
 const createError = require('http-errors')
 const express = require('express')
+const cors = require('cors')
 const path = require('path')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
@@ -17,6 +18,9 @@ const app = express()
 
 // hide express tag in header
 app.disable('x-powered-by')
+
+// enable all cors requests TODO REDO, THIS IS BAD, NEEDS REDOING
+app.use(cors())
 
 // favicon
 app.use(favicon(path.join(__dirname, '/public/favicon/favicon.ico')))

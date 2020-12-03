@@ -5,11 +5,11 @@ exports.validateObjectId = function (objectId) {
   return /^[0-9a-f]{24}$/.test(objectId)
 }
 exports.validateUsername = function (username) {
-  return /^[-0-9_a-zA-Z]{5,20}$/.test(username)
+  return /^[-0-9_a-zA-ZáéíóúñüÁÉÍÓÚÑÜ]{5,24}$/.test(username)
 }
 exports.validatePassword = function (password) {
   return (
-    password.length >= 12 &&
+    password.length >= 10 &&
       password.length <= 1000 &&
       /[a-z]/.test(password) &&
       /[A-Z]/.test(password) &&

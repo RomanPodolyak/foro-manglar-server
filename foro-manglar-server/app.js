@@ -20,7 +20,12 @@ const app = express()
 app.disable('x-powered-by')
 
 // enable all cors requests TODO REDO, THIS IS BAD, NEEDS REDOING
-app.use(cors())
+const corsOptions = {
+  origin: process.env.ORIGIN,
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+  credentials: true
+}
+app.use(cors(corsOptions))
 
 // favicon
 app.use(favicon(path.join(__dirname, '/public/favicon/favicon.ico')))

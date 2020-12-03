@@ -577,6 +577,21 @@ router.post('/logout', function (req, res, next) {
     status: 'ok'
   })
 })
+router.get('/currentuser', function (req, res, next) {
+  if (req.user) {
+    res.send({
+      status: 'ok',
+      user: req.user
+    })
+    process.stdout.write('Username: ')
+    console.log(getters.getUserName(req))
+  } else {
+    res.send({
+      status: 'error',
+      info: 'No user logged in'
+    })
+  }
+})
 
 // TODO delete
 router.get('/test', function (req, res, next) {

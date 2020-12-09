@@ -45,7 +45,7 @@ exports.getDocumentById = function (id, type) {
 
 /** returns array of documents promise using id and model type.
  * A required flag can be set. A custom limit and offset can be added */
-exports.getDocumentsByParentId = function (id, type, parentType, required, limit, offset) {
+exports.getDocumentsByParentId = function (id, type, parentType, required, limit, page) {
   if (required && !validators.validateObjectId(id)) {
     console.log('objectId not valid')
     return
@@ -53,17 +53,17 @@ exports.getDocumentsByParentId = function (id, type, parentType, required, limit
   return this.models[type]
     .find({ [this.stringToParent(parentType)]: id !== '' ? id : undefined, visible: true })
     .limit(parseInt(limit) || 100)
-    .skip(parseInt(offset) || 0)
+    .skip(parseInt(page * limit) || 0)
     .exec()
 }
 
 // TODO delete
 /** DEBUG!!! returns all documents from a specific type, visible or not */
-exports.getAllDocumentsByType = function (type, limit, offset) {
+exports.getAllDocumentsByType = function (type, limit, page) {
   return this.models[type]
     .find({})
     .limit(parseInt(limit) || 100)
-    .skip(parseInt(offset) || 0)
+    .skip(parseInt(page * limit) || 0)
     .exec()
 }
 

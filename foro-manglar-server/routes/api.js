@@ -133,34 +133,32 @@ router.post('/create/comment', function (req, res, next) {
 
 // READ
 // themes
+// DEBUG TODO DELETE
 router.get('/read/themes/all', function (req, res, next) {
-  helper.getAllDocumentsByType('theme', req.body.limit, req.body.skip).then(data => {
+  helper.getAllDocumentsByType('theme', req.query.limit, req.query.page).then(data => {
     const obj = {
       status: 'ok',
       data: data
     }
-    console.log('data.length :>> ', data.length) // TODO delete
     res.send(obj)
   })
 })
-router.get('/read/themes', function (req, res, next) {
-  if (validators.checkValidity(req, res, 'parentTheme')) {
-    helper.getDocumentsByParentId(req.body.parentTheme, 'theme', 'theme', false, req.body.limit, req.body.skip).then(data => {
+router.get('/read/themes/:themeId?', function (req, res, next) {
+  if (validators.checkValidity({ ...req, body: { parentTheme: req.params.themeId } }, res, 'parentTheme')) {
+    helper.getDocumentsByParentId(req.params.themeId, 'theme', 'theme', false, req.query.limit, req.query.page).then(data => {
       const obj = {
         status: 'ok',
         data: data
       }
-      console.log('data.length :>> ', data.length) // TODO delete
       res.send(obj)
     })
   }
 })
-router.get('/read/theme', function (req, res, next) {
-  if (!validators.checkValidity(req, res, 'themeId', true)) {
+router.get('/read/theme/:themeId', function (req, res, next) {
+  if (!validators.checkValidity({ ...req, body: { themeId: req.params.themeId } }, res, 'themeId', true)) {
     return
   }
-  helper.getDocumentById(req.body.themeId, 'theme').then(data => {
-    console.log('data :>> ', data) // TODO delete
+  helper.getDocumentById(req.params.themeId, 'theme').then(data => {
     const obj = {
       status: data ? 'ok' : 'error',
       data: data
@@ -171,7 +169,7 @@ router.get('/read/theme', function (req, res, next) {
 
 // posts
 router.get('/read/posts/all', function (req, res, next) {
-  helper.getAllDocumentsByType('post', req.body.limit, req.body.skip).then(data => {
+  helper.getAllDocumentsByType('post', req.query.limit, req.query.page).then(data => {
     const obj = {
       status: 'ok',
       data: data
@@ -180,9 +178,9 @@ router.get('/read/posts/all', function (req, res, next) {
     res.send(obj)
   })
 })
-router.get('/read/posts', function (req, res, next) {
-  if (validators.checkValidity(req, res, 'parentTheme', true)) {
-    helper.getDocumentsByParentId((req.body.parentTheme), 'post', 'theme', true, req.body.limit, req.body.skip).then(data => {
+router.get('/read/posts/:themeId', function (req, res, next) {
+  if (validators.checkValidity({ ...req, body: { parentTheme: req.params.themeId } }, res, 'parentTheme', true)) {
+    helper.getDocumentsByParentId((req.params.themeId), 'post', 'theme', true, req.query.limit, req.query.page).then(data => {
       const obj = {
         status: 'ok',
         data: data
@@ -192,11 +190,11 @@ router.get('/read/posts', function (req, res, next) {
     })
   }
 })
-router.get('/read/post', function (req, res, next) {
-  if (!validators.checkValidity(req, res, 'postId', true)) {
+router.get('/read/post/:postId', function (req, res, next) {
+  if (!validators.checkValidity({ ...req, body: { postId: req.params.postId } }, res, 'postId', true)) {
     return
   }
-  helper.getDocumentById(req.body.postId, 'post').then(data => {
+  helper.getDocumentById(req.params.postId, 'post').then(data => {
     console.log('data :>> ', data) // TODO delete
     const obj = {
       status: data ? 'ok' : 'error',
@@ -208,7 +206,7 @@ router.get('/read/post', function (req, res, next) {
 
 // comments
 router.get('/read/comments/all', function (req, res, next) {
-  helper.getAllDocumentsByType('comment', req.body.limit, req.body.skip).then(data => {
+  helper.getAllDocumentsByType('comment', req.query.limit, req.query.skip).then(data => {
     const obj = {
       status: 'ok',
       data: data
@@ -217,9 +215,9 @@ router.get('/read/comments/all', function (req, res, next) {
     res.send(obj)
   })
 })
-router.get('/read/comments', function (req, res, next) {
-  if (validators.checkValidity(req, res, 'parentPost', true)) {
-    helper.getDocumentsByParentId((req.body.parentPost), 'comment', 'post', true, req.body.limit, req.body.skip).then(data => {
+router.get('/read/comments/:postId', function (req, res, next) {
+  if (validators.checkValidity({ ...req, body: { parentPost: req.params.postId } }, res, 'parentPost', true)) {
+    helper.getDocumentsByParentId((req.params.postId), 'comment', 'post', true, req.query.limit, req.query.page).then(data => {
       const obj = {
         status: 'ok',
         data: data
@@ -229,11 +227,11 @@ router.get('/read/comments', function (req, res, next) {
     })
   }
 })
-router.get('/read/comment', function (req, res, next) {
-  if (!validators.checkValidity(req, res, 'commentId', true)) {
+router.get('/read/comment/:commentId', function (req, res, next) {
+  if (!validators.checkValidity({ ...req, body: { postId: req.params.commentId } }, res, 'commentId', true)) {
     return
   }
-  helper.getDocumentById(req.body.commentId, 'comment').then(data => {
+  helper.getDocumentById(req.params.commentId, 'comment').then(data => {
     console.log('data :>> ', data) // TODO delete
     const obj = {
       status: data ? 'ok' : 'error',
@@ -257,7 +255,7 @@ router.put('/update/theme', function (req, res, next) {
     return
   }
   helper.getDocumentById(req.body.themeId, 'theme').then(result => {
-    if (result.originalPoster !== req.user.username) {
+    if (result[0].originalPoster !== req.user.username) {
       res.status(401).send(helper.generateErrorObject('Unauthorized, not the original poster', 401))
     } else {
       ThemeModel.updateOne({ _id: req.body.themeId, visible: true }, { description: req.body.description }, (err, raw) => {
@@ -285,7 +283,7 @@ router.put('/update/post', function (req, res, next) {
     return
   }
   helper.getDocumentById(req.body.postId, 'post').then(result => {
-    if (result.originalPoster !== req.user.username) {
+    if (result[0].originalPoster !== req.user.username) {
       res.status(401).send(helper.generateErrorObject('Unauthorized, not the original poster', 401))
     } else {
       PostModel.updateOne({ _id: req.body.postId, visible: true }, { content: req.body.content }, (err, raw) => {
@@ -313,7 +311,7 @@ router.put('/update/comment', function (req, res, next) {
     return
   }
   helper.getDocumentById(req.body.commentId, 'comment').then(result => {
-    if (result.originalPoster !== req.user.username) {
+    if (result[0].originalPoster !== req.user.username) {
       res.status(401).send(helper.generateErrorObject('Unauthorized, not the original poster', 401))
     } else {
       CommentModel.updateOne({ _id: req.body.commentId, visible: true }, { content: req.body.content }, (err, raw) => {
@@ -342,7 +340,7 @@ router.put('/hide/theme', function (req, res, next) {
     return
   }
   helper.getDocumentById(req.body.themeId, 'theme').then(result => {
-    if (result.originalPoster !== req.user.username) {
+    if (result[0].originalPoster !== req.user.username) {
       res.status(401).send(helper.generateErrorObject('Unauthorized, not the original poster', 401))
     } else {
       ThemeModel.updateOne({ _id: req.body.themeId, visible: true }, { visible: false }, (err, raw) => {
@@ -369,7 +367,7 @@ router.put('/hide/post', function (req, res, next) {
     return
   }
   helper.getDocumentById(req.body.postId, 'post').then(result => {
-    if (result.originalPoster !== req.user.username) {
+    if (result[0].originalPoster !== req.user.username) {
       res.status(401).send(helper.generateErrorObject('Unauthorized, not the original poster', 401))
     } else {
       PostModel.updateOne({ _id: req.body.postId, visible: true }, { visible: false }, (err, raw) => {
@@ -396,7 +394,7 @@ router.put('/hide/comment', function (req, res, next) {
     return
   }
   helper.getDocumentById(req.body.commentId, 'comment').then(result => {
-    if (result.originalPoster !== req.user.username) {
+    if (result[0].originalPoster !== req.user.username) {
       res.status(401).send(helper.generateErrorObject('Unauthorized, not the original poster', 401))
     } else {
       CommentModel.updateOne({ _id: req.body.commentId, visible: true }, { visible: false }, (err, raw) => {
@@ -425,7 +423,7 @@ router.delete('/delete/theme', function (req, res, next) {
     return
   }
   helper.getDocumentById(req.body.themeId, 'theme').then(result => {
-    if (result.originalPoster !== req.user.username) {
+    if (result[0].originalPoster !== req.user.username) {
       res.status(401).send(helper.generateErrorObject('Unauthorized, not the original poster', 401))
     } else {
       ThemeModel.deleteOne({ _id: req.body.themeId }, (err, result) => {
@@ -450,7 +448,7 @@ router.delete('/delete/post', function (req, res, next) {
     return
   }
   helper.getDocumentById(req.body.postId, 'post').then(result => {
-    if (result.originalPoster !== req.user.username) {
+    if (result[0].originalPoster !== req.user.username) {
       res.status(401).send(helper.generateErrorObject('Unauthorized, not the original poster', 401))
     } else {
       PostModel.deleteOne({ _id: req.body.postId }, (err, result) => {
@@ -475,7 +473,7 @@ router.delete('/delete/comment', function (req, res, next) {
     return
   }
   helper.getDocumentById(req.body.commentId, 'comment').then(result => {
-    if (result.originalPoster !== req.user.username) {
+    if (result[0].originalPoster !== req.user.username) {
       res.status(401).send(helper.generateErrorObject('Unauthorized, not the original poster', 401))
     } else {
       CommentModel.deleteOne({ _id: req.body.commentId }, (err, result) => {
@@ -505,10 +503,10 @@ router.get('/', function (req, res, next) {
   res.render('index', { title: 'API DOCUMENTATION' })
 })
 
-// test if API is working
-router.get('/hello', function (req, res, next) {
+// test if API server is working
+router.get('/check', function (req, res, next) {
   res.contentType('json')
-  const body = { status: 'ok', message: 'Hello World' }
+  const body = { status: 'ok' }
   res.send(body)
 })
 
@@ -591,19 +589,6 @@ router.get('/currentuser', function (req, res, next) {
       info: 'No user logged in'
     })
   }
-})
-
-// TODO delete
-router.get('/test', function (req, res, next) {
-  res.send({
-    status: 'test',
-    info: {
-      user: req.user,
-      username: getters.getUserName(req)
-    }
-  })
-  process.stdout.write('Username: ')
-  console.log(getters.getUserName(req))
 })
 
 module.exports = router

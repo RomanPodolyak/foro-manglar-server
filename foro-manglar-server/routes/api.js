@@ -33,6 +33,8 @@ router.post('/create/theme', function (req, res, next) {
   } else if (!req.user.enabled) {
     res.status(401).send(helper.generateErrorObject('Unauthorized, user disabled', 401))
     return
+  } else if (req.user.userType !== 'admin') {
+    res.status(403).send(helper.generateErrorObject('Currently only admins can create themes', 403))
   }
   if (!validators.checkValidity(req, res, 'title', true) ||
   !validators.checkValidity(req, res, 'description') ||

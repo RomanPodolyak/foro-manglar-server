@@ -25,7 +25,7 @@ exports.validateDescription = function (description) {
   return description.length <= 500
 }
 exports.validateTitle = function (title) {
-  return title.length >= 10 && title.length <= 200
+  return title.length >= 3 && title.length <= 200
 }
 exports.validateContent = function (content) {
   return content.length <= 5000

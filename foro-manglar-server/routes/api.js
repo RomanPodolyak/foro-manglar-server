@@ -1,18 +1,18 @@
 /* eslint-disable no-unused-vars */
 
-// TODO ckeck parent theme or post exists when creating post or comment
-// TODO implement permissions for different type of users
-// TODO implement search function
-// TODO implement sort function
-// TODO implement filter function
-// DONE implement active/visible user/theme/post/comment
-// DONE refactor deletions to make invisible instead of deleting
-// TODO make something better with the hide
-// TODO implement user crud
-// DONE implement only OP can modify or delete
-// DONE implement only logged in user can create, modify or delete
-// TODO implement update password
-// TODO delete childs
+// [ ] ckeck parent theme or post exists when creating post or comment
+// [ ] implement permissions for different type of users
+// [ ] implement search function
+// [ ] implement sort function
+// [ ] implement filter function
+// [x] implement active/visible user/theme/post/comment
+// [x] refactor deletions to make invisible instead of deleting
+// [ ] make something better with the hide
+// [ ] implement user crud
+// [x] implement only OP can modify or delete
+// [x] implement only logged in user can create, modify or delete
+// [ ] implement update password
+// [ ] delete childs
 
 const express = require('express')
 const passport = require('passport')

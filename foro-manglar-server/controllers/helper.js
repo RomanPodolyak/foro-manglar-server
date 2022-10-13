@@ -39,7 +39,7 @@ exports.getDocumentById = function (id, type) {
   if (validators.validateObjectId(id)) {
     return this.models[type].find({ _id: id, visible: true }).exec()
   } else {
-    console.log('objectId not valid')
+    console.error('objectId not valid')
   }
 }
 
@@ -47,7 +47,7 @@ exports.getDocumentById = function (id, type) {
  * A required flag can be set. A custom limit and offset can be added */
 exports.getDocumentsByParentId = function (id, type, parentType, required, limit, page) {
   if (required && !validators.validateObjectId(id)) {
-    console.log('objectId not valid')
+    console.error('objectId not valid')
     return
   }
   return this.models[type]

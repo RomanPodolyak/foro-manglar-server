@@ -1,17 +1,16 @@
-const createError = require('http-errors')
 const express = require('express')
-const cors = require('cors')
-const path = require('path')
-const cookieParser = require('cookie-parser')
-const logger = require('morgan')
-const favicon = require('serve-favicon')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')(session)
+const mongooseConnection = require('./controllers/mongoose-connection')
+const createError = require('http-errors')
+const path = require('path')
+const cors = require('cors')
+const cookieParser = require('cookie-parser')
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
-
 const apiRouter = require('./routes/api')
-const mongooseConnection = require('./controllers/mongoose-connection')
+const favicon = require('serve-favicon')
+const logger = require('morgan')
 
 // creates express aplication
 const app = express()
@@ -19,9 +18,8 @@ const app = express()
 // hide express tag in header
 app.disable('x-powered-by')
 
-// enable all cors requests TODO REDO, THIS IS BAD, NEEDS REDOING
 const corsOptions = {
-  origin: process.env.ORIGIN,
+  origin: process.env.ORIGIN.split(' '),
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
   credentials: true
 }

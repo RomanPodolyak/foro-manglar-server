@@ -21,7 +21,7 @@ mongooseConnection
     dbName: 'foroManglar'
   })
   .catch((e) => {
-    console.log(e)
+    console.error(e)
   })
 
 const db = mongooseConnection.connection

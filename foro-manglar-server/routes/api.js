@@ -37,13 +37,12 @@ router.post('/create/theme', function (req, res, next) {
     res.status(403).send(helper.generateErrorObject('Currently only admins can create themes', 403))
   }
   if (!validators.checkValidity(req, res, 'title', true) ||
-  !validators.checkValidity(req, res, 'description') ||
-  !validators.checkValidity(req, res, 'parentTheme')) {
+    !validators.checkValidity(req, res, 'description') ||
+    !validators.checkValidity(req, res, 'parentTheme')) {
     return
   }
   validators.checkParentExists(req, res, 'theme', false)
     .then(result => {
-      console.log('result :>> ', result)
       if (result) {
         const obj = new ThemeModel({
           parentTheme: req.body.parentTheme === '' ? undefined : req.body.parentTheme,
@@ -56,7 +55,7 @@ router.post('/create/theme', function (req, res, next) {
         try {
           obj.save()
         } catch (e) {
-          console.log(e)
+          console.error(e)
           helper.generateErrorObject(e, 500)
         }
 
@@ -73,8 +72,8 @@ router.post('/create/post', function (req, res, next) {
     return
   }
   if (!validators.checkValidity(req, res, 'title', true) ||
-  !validators.checkValidity(req, res, 'content', true) ||
-  !validators.checkValidity(req, res, 'parentTheme', true)) {
+    !validators.checkValidity(req, res, 'content', true) ||
+    !validators.checkValidity(req, res, 'parentTheme', true)) {
     return
   }
   validators.checkParentExists(req, res, 'post', true)
@@ -91,7 +90,7 @@ router.post('/create/post', function (req, res, next) {
         try {
           obj.save()
         } catch (e) {
-          console.log(e)
+          console.error(e)
           helper.generateErrorObject(e, 500)
         }
 
@@ -124,7 +123,7 @@ router.post('/create/comment', function (req, res, next) {
         try {
           obj.save()
         } catch (e) {
-          console.log(e)
+          console.error(e)
           helper.generateErrorObject(e, 500)
         }
 
@@ -176,7 +175,6 @@ router.get('/read/posts/all', function (req, res, next) {
       status: 'ok',
       data: data
     }
-    console.log('data.length :>> ', data.length) // TODO delete
     res.send(obj)
   })
 })
@@ -187,7 +185,6 @@ router.get('/read/posts/:themeId', function (req, res, next) {
         status: 'ok',
         data: data
       }
-      console.log('data.length :>> ', data.length) // TODO delete
       res.send(obj)
     })
   }
@@ -197,7 +194,6 @@ router.get('/read/post/:postId', function (req, res, next) {
     return
   }
   helper.getDocumentById(req.params.postId, 'post').then(data => {
-    console.log('data :>> ', data) // TODO delete
     const obj = {
       status: data ? 'ok' : 'error',
       data: data
@@ -213,7 +209,6 @@ router.get('/read/comments/all', function (req, res, next) {
       status: 'ok',
       data: data
     }
-    console.log('data.length :>> ', data.length) // TODO delete
     res.send(obj)
   })
 })
@@ -224,7 +219,6 @@ router.get('/read/comments/:postId', function (req, res, next) {
         status: 'ok',
         data: data
       }
-      console.log('data.length :>> ', data.length) // TODO delete
       res.send(obj)
     })
   }
@@ -234,7 +228,6 @@ router.get('/read/comment/:commentId', function (req, res, next) {
     return
   }
   helper.getDocumentById(req.params.commentId, 'comment').then(data => {
-    console.log('data :>> ', data) // TODO delete
     const obj = {
       status: data ? 'ok' : 'error',
       data: data
@@ -253,7 +246,7 @@ router.put('/update/theme', function (req, res, next) {
     return
   }
   if (!validators.checkValidity(req, res, 'themeId', true) ||
-  !validators.checkValidity(req, res, 'description', true)) {
+    !validators.checkValidity(req, res, 'description', true)) {
     return
   }
   helper.getDocumentById(req.body.themeId, 'theme').then(result => {
@@ -262,7 +255,6 @@ router.put('/update/theme', function (req, res, next) {
     } else {
       ThemeModel.updateOne({ _id: req.body.themeId, visible: true }, { description: req.body.description }, (err, raw) => {
         if (err) return
-        console.log('raw :>> ', raw) // TODO delete
         const obj = {
           status: raw.ok ? 'ok' : 'error',
           info: raw.ok ? raw.n ? raw.nModified ? 'successful modification' : 'nothing has been modified' : 'nothing has been found' : undefined
@@ -290,7 +282,6 @@ router.put('/update/post', function (req, res, next) {
     } else {
       PostModel.updateOne({ _id: req.body.postId, visible: true }, { content: req.body.content }, (err, raw) => {
         if (err) return
-        console.log('raw :>> ', raw) // TODO delete
         const obj = {
           status: raw.ok ? 'ok' : 'error',
           info: raw.ok ? raw.n ? raw.nModified ? 'successful modification' : 'nothing has been modified' : 'nothing has been found' : undefined
@@ -318,7 +309,6 @@ router.put('/update/comment', function (req, res, next) {
     } else {
       CommentModel.updateOne({ _id: req.body.commentId, visible: true }, { content: req.body.content }, (err, raw) => {
         if (err) return
-        console.log('raw :>> ', raw) // TODO delete
         const obj = {
           status: raw.ok ? 'ok' : 'error',
           info: raw.ok ? raw.n ? raw.nModified ? 'successful modification' : 'nothing has been modified' : 'nothing has been found' : undefined
@@ -347,7 +337,6 @@ router.put('/hide/theme', function (req, res, next) {
     } else {
       ThemeModel.updateOne({ _id: req.body.themeId, visible: true }, { visible: false }, (err, raw) => {
         if (err) return
-        console.log('raw :>> ', raw) // TODO delete
         const obj = {
           status: raw.ok ? 'ok' : 'error',
           info: raw.ok ? raw.n ? raw.nModified ? 'successful modification' : 'nothing has been modified' : 'nothing has been found' : undefined
@@ -374,7 +363,6 @@ router.put('/hide/post', function (req, res, next) {
     } else {
       PostModel.updateOne({ _id: req.body.postId, visible: true }, { visible: false }, (err, raw) => {
         if (err) return
-        console.log('raw :>> ', raw) // TODO delete
         const obj = {
           status: raw.ok ? 'ok' : 'error',
           info: raw.ok ? raw.n ? raw.nModified ? 'successful modification' : 'nothing has been modified' : 'nothing has been found' : undefined
@@ -401,7 +389,6 @@ router.put('/hide/comment', function (req, res, next) {
     } else {
       CommentModel.updateOne({ _id: req.body.commentId, visible: true }, { visible: false }, (err, raw) => {
         if (err) return
-        console.log('raw :>> ', raw) // TODO delete
         const obj = {
           status: raw.ok ? 'ok' : 'error',
           info: raw.ok ? raw.n ? raw.nModified ? 'successful modification' : 'nothing has been modified' : 'nothing has been found' : undefined
@@ -429,7 +416,7 @@ router.delete('/delete/theme', function (req, res, next) {
       res.status(401).send(helper.generateErrorObject('Unauthorized, not the original poster', 401))
     } else {
       ThemeModel.deleteOne({ _id: req.body.themeId }, (err, result) => {
-        if (err) console.log(err)
+        if (err) console.error(err)
         res.status(result.ok ? result.n ? 200 : 409 : 500).send({
           status: result.ok ? 'ok' : 'error',
           info: result.ok && result.n ? 'succesful deletion' : 'nothing has been found'
@@ -454,7 +441,7 @@ router.delete('/delete/post', function (req, res, next) {
       res.status(401).send(helper.generateErrorObject('Unauthorized, not the original poster', 401))
     } else {
       PostModel.deleteOne({ _id: req.body.postId }, (err, result) => {
-        if (err) console.log(err)
+        if (err) console.error(err)
         res.status(result.ok ? result.deletedCount ? 200 : 409 : 500).send({
           status: result.ok ? 'ok' : 'error',
           info: result.ok && result.deletedCount ? 'succesful deletion' : 'nothing has been found'
@@ -479,7 +466,7 @@ router.delete('/delete/comment', function (req, res, next) {
       res.status(401).send(helper.generateErrorObject('Unauthorized, not the original poster', 401))
     } else {
       CommentModel.deleteOne({ _id: req.body.commentId }, (err, result) => {
-        if (err) console.log(err)
+        if (err) console.error(err)
         res.status(result.ok ? result.deletedCount ? 200 : 409 : 500).send({
           status: result.ok ? 'ok' : 'error',
           info: result.ok && result.deletedCount ? 'succesful deletion' : 'nothing has been found'
@@ -537,7 +524,7 @@ router.post('/register', function (req, res, next) {
 
   UserModel.register(obj, req.body.password, function (err, user) {
     if (err) {
-      console.log(JSON.stringify(err, null, 2))
+      console.error(JSON.stringify(err, null, 2))
       return res
         .status(409)
         .send({ status: 'error', info: err.message, code: 409 })
@@ -553,15 +540,14 @@ router.post('/login', function (req, res, next) {
   }
   passport.authenticate('local', function (err, user, info) {
     if (err) {
-      console.log(err)
+      console.error(err)
     }
     if (info) {
-      console.log(info)
       res.status(401).send(helper.generateErrorObject('Wrong credentials', 401))
     } else {
       req.login(user, function (err) {
         if (err) {
-          console.log(err)
+          console.error(err)
           return res
             .status(500)
             .send({ status: 'error', info: err.message, code: 500 })
@@ -572,7 +558,7 @@ router.post('/login', function (req, res, next) {
   })(req, res, next)
 })
 router.post('/logout', function (req, res, next) {
-  req.logout()
+  req.logout({}, err => console.error(err))
   res.send({
     status: 'ok'
   })
@@ -583,8 +569,6 @@ router.get('/currentuser', function (req, res, next) {
       status: 'ok',
       user: req.user
     })
-    process.stdout.write('Username: ')
-    console.log(getters.getUserName(req))
   } else {
     res.send({
       status: 'error',

@@ -558,7 +558,7 @@ router.post('/login', function (req, res, next) {
   })(req, res, next)
 })
 router.post('/logout', function (req, res, next) {
-  req.logout()
+  req.logout({}, err => console.error(err))
   res.send({
     status: 'ok'
   })

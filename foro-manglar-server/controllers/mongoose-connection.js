@@ -5,13 +5,14 @@ mongooseConnection.set('debug', true)
 // mongodb://admin:asdf@localhost:27017/?authSource=someDb   <- TEST DATABASE, TODO CHANGE
 const dbConnectionString =
   'mongodb://' +
-  (process.env.DB_LOGIN
+  (process.env.DB_LOGIN === 'true'
     ? process.env.DB_USERNAME + ':' + process.env.DB_PASSWORD + '@'
     : '') +
   process.env.DB_HOST +
   ':' +
   process.env.DB_PORT +
-  '/' + (process.env.DB_AUTH_SOURCE_TEST ? '?authSource=' + process.env.DB_AUTH_SOURCE : '')
+  '/' + (process.env.DB_AUTH_SOURCE_TEST === 'true' ? '?authSource=' + process.env.DB_AUTH_SOURCE : '')
+console.log(dbConnectionString)
 
 // connect to MongoDB
 mongooseConnection
